@@ -44,10 +44,10 @@ jobs:
         run: |
           npx cap add android
 
-      # Generates Android app icons from assets/icon.png
+      # Corrected npx command name below
       - name: Generate App Icons
         run: |
-          npx cap-assets generate --android
+          npx @capacitor/assets generate --android
 
       - name: Sync Capacitor Assets
         run: |
