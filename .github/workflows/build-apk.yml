@@ -38,7 +38,7 @@ jobs:
 
       - name: Initialize Capacitor Configuration
         run: |
-          npx cap init "My App" "com.example.myapp" --web-dir www
+          npx cap init "LevelUp" "com.greyratsu.LevelUp" --web-dir www
 
       - name: Add Android Platform & Sync Assets
         run: |
