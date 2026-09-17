@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - master
   workflow_dispatch:
 
 jobs:
@@ -23,7 +24,7 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
-          java-version: '17'
+          java-version: '21' # Updated to Java 21
 
       - name: Install NPM Dependencies
         run: |
@@ -33,12 +34,11 @@ jobs:
       - name: Bundle Web Assets into www Directory
         run: |
           mkdir -p www
-          # Copies all repository files into www while ignoring internal folders
           rsync -av --exclude='www' --exclude='node_modules' --exclude='.git' --exclude='.github' --exclude='android' ./ www/
 
       - name: Initialize Capacitor Configuration
         run: |
-          npx cap init "My HTML App" "com.example.htmlapp" --web-dir www
+          npx cap init "My App" "com.example.myapp" --web-dir www
 
       - name: Add Android Platform & Sync Assets
         run: |
