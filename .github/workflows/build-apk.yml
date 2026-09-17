@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # Allows manual trigger from GitHub UI
+  workflow_dispatch:
 
 jobs:
   build-apk:
@@ -27,13 +27,18 @@ jobs:
 
       - name: Install NPM Dependencies
         run: |
-          npm init -y # Ensures package.json exists if your repo is plain HTML/CSS
+          npm init -y
           npm install @capacitor/core @capacitor/cli @capacitor/android
+
+      - name: Bundle Web Assets into www Directory
+        run: |
+          mkdir -p www
+          # Copies all repository files into www while ignoring internal folders
+          rsync -av --exclude='www' --exclude='node_modules' --exclude='.git' --exclude='.github' --exclude='android' ./ www/
 
       - name: Initialize Capacitor Configuration
         run: |
-          # Generate capacitor.config.json dynamically
-          npx cap init "My HTML App" "com.example.htmlapp" --web-dir .
+          npx cap init "My HTML App" "com.example.htmlapp" --web-dir www
 
       - name: Add Android Platform & Sync Assets
         run: |
