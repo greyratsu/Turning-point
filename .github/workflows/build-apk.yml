@@ -24,25 +24,33 @@ jobs:
         uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
-          java-version: '21' # Updated to Java 21
+          java-version: '21'
 
       - name: Install NPM Dependencies
         run: |
           npm init -y
-          npm install @capacitor/core @capacitor/cli @capacitor/android
+          npm install @capacitor/core @capacitor/cli @capacitor/android @capacitor/assets
 
       - name: Bundle Web Assets into www Directory
         run: |
           mkdir -p www
-          rsync -av --exclude='www' --exclude='node_modules' --exclude='.git' --exclude='.github' --exclude='android' ./ www/
+          rsync -av --exclude='www' --exclude='node_modules' --exclude='.git' --exclude='.github' --exclude='android' --exclude='assets' ./ www/
 
       - name: Initialize Capacitor Configuration
         run: |
-          npx cap init "LevelUp" "com.greyratsu.LevelUp" --web-dir www
+          npx cap init "My App" "com.example.myapp" --web-dir www
 
-      - name: Add Android Platform & Sync Assets
+      - name: Add Android Platform
         run: |
           npx cap add android
+
+      # Generates Android app icons from assets/icon.png
+      - name: Generate App Icons
+        run: |
+          npx cap-assets generate --android
+
+      - name: Sync Capacitor Assets
+        run: |
           npx cap copy android
 
       - name: Build Debug APK with Gradle
